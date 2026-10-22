@@ -65,15 +65,12 @@ public class GameBoard {
     }
 
     public boolean isValidCord(int[] cord) {
-        System.out.println(startCord[0] + " , " + startCord[1]);
-        System.out.println(cord[0] + " , " + cord[1]);
         int invalidCord[] = new int[2];
         for(int i = cord[0]-1; i <= cord[0]+1; i++) {
             for(int j = cord[1]-1; j <= cord[1]+1; j++) {
                 invalidCord[0] = i;
                 invalidCord[1] = j;
                 if(startCord[0] == invalidCord[0] && startCord[1] == invalidCord[1]) {
-                    System.out.println("INVALID CORD");
                     return false;
                 } else {
                     continue;

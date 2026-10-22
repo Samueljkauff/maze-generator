@@ -30,7 +30,5 @@ public class Main {
             }
             System.out.println(); 
         }
-        System.out.println(board.startCord[0] + " , " + board.startCord[1]);
-        System.out.println(board.endCord[0] + " , " + board.endCord[1]);
     }
 }
