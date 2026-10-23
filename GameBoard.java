@@ -5,6 +5,7 @@ public class GameBoard {
     char maze[][];
     int[] startCord;
     int[] endCord;
+    Random ran = new Random();
 
     public GameBoard(int mazeSize) {
         this.mazeSize = mazeSize;
@@ -13,7 +14,7 @@ public class GameBoard {
         this.maze = generateMaze(mazeSize); 
     }
 
-    public char[][] generateMaze(int size) {
+    private char[][] initializeMaze(int size) {
         char[][] board = new char[size][size];
 
         for(int i = 0; i < size; i++) {
@@ -28,8 +29,19 @@ public class GameBoard {
         return board;
     }
 
-    public int[] generateCords() {
-        Random ran = new Random();
+    public char[][] generateMaze(int size) {
+        char[][] initialMaze = initializeMaze(size);
+        boolean[][] traveledMaze = new boolean[size][size];
+        int startingX = ran.nextInt(0, size);
+        int startingY = ran.nextInt(0, size);
+
+        traveledMaze[startingX][startingY] = true;
+
+
+        return initialMaze;
+    }
+
+    private int[] generateCords() {
         int[] cord = new int[2];
         int orientation = ran.nextInt(0,4);
         int location = ran.nextInt(3, mazeSize-4);
@@ -64,7 +76,7 @@ public class GameBoard {
         return cord;
     }
 
-    public boolean isValidCord(int[] cord) {
+    private boolean isValidCord(int[] cord) {
         int invalidCord[] = new int[2];
         for(int i = cord[0]-1; i <= cord[0]+1; i++) {
             for(int j = cord[1]-1; j <= cord[1]+1; j++) {
