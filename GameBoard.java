@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class GameBoard {
@@ -32,11 +35,65 @@ public class GameBoard {
     public char[][] generateMaze(int size) {
         char[][] initialMaze = initializeMaze(size);
         boolean[][] traveledMaze = new boolean[size][size];
-        int startingX = ran.nextInt(0, size);
-        int startingY = ran.nextInt(0, size);
+        int X = ran.nextInt(0, size);
+        int Y = ran.nextInt(0, size);
+        int move;
+        int newX;
+        int newY;
 
-        traveledMaze[startingX][startingY] = true;
+        traveledMaze[X][Y] = true;
+        initialMaze[X][Y] = ' ';
 
+        List<Integer> directions = new ArrayList<>(List.of(0, 1, 2, 3));
+        Collections.shuffle(directions);
+
+        for (int direction : directions) {
+        switch (direction) {
+            case 0:
+                // UP
+                move = -2;
+
+                if (X + move > 0 && X + move < size - 1 && !traveledMaze[X + move][Y] && initialMaze[X + move][Y] == 'X') {
+                    newX = X + move;
+                    traveledMaze[newX][Y] = true;
+                    initialMaze[newX][Y] = ' ';
+                }
+                break;
+
+            case 1:
+                // RIGHT
+                move = 2;
+
+                if (Y + move > 0 && Y + move < size - 1 && !traveledMaze[X][Y + move] && initialMaze[X][Y + move] == 'X') {
+                    newY = Y + move;
+                    traveledMaze[X][newY] = true;
+                    initialMaze[X][newY] = ' ';
+                }
+                break;
+
+            case 2:
+                // DOWN
+                move = 2;
+
+                if (X + move > 0 && X + move < size - 1 && !traveledMaze[X + move][Y] && initialMaze[X + move][Y] == 'X') {
+                    newX = X + move;
+                    traveledMaze[newX][Y] = true;
+                    initialMaze[newX][Y] = ' ';
+                }
+                break;
+
+            case 3:
+                // LEFT
+                move = -2;
+
+                if (Y + move > 0 && Y + move < size - 1 && !traveledMaze[X][Y + move] && initialMaze[X][Y + move] == 'X') {
+                    newY = Y + move;
+                    traveledMaze[X][newY] = true;
+                    initialMaze[X][newY] = ' ';
+                }
+                break;
+        }
+        }
 
         return initialMaze;
     }
