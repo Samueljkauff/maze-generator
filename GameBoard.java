@@ -35,12 +35,16 @@ public class GameBoard {
     public char[][] generateMaze(int size) {
         char[][] initialMaze = initializeMaze(size);
         boolean[][] traveledMaze = new boolean[size][size];
-        int X = ran.nextInt((size - 1) / 2) * 2 + 1;
-        int Y = ran.nextInt((size - 1) / 2) * 2 + 1;
+        int maxOddCoordinate = size - 2;
+        int coordinateCount = (maxOddCoordinate + 1) / 2;
+
+        int X = ran.nextInt(coordinateCount) * 2 + 1;
+        int Y = ran.nextInt(coordinateCount) * 2 + 1;
         traveledMaze[X][Y] = true;
         initialMaze[X][Y] = ' ';
 
         generateMazeRecusive(initialMaze, traveledMaze, size, X, Y);
+        connectEntranceAndExit(initialMaze);
 
         return initialMaze;
     }
@@ -62,7 +66,7 @@ public class GameBoard {
                 if (newX > 0 && newX < size - 1 && !traveledMaze[newX][Y] && maze[newX][Y] == 'X') {
                     traveledMaze[newX][Y] = true;
                     maze[newX][Y] = ' ';
-                    maze[newX-1][Y] = ' ';
+                    maze[newX+1][Y] = ' ';
                     generateMazeRecusive(maze, traveledMaze, size, newX, Y);
                 }
                 break;
@@ -75,7 +79,7 @@ public class GameBoard {
                 if (newY > 0 && newY < size - 1 && !traveledMaze[X][newY] && maze[X][newY] == 'X') {
                     traveledMaze[X][newY] = true;
                     maze[X][newY] = ' ';
-                    maze[X][newY+1] = ' ';
+                    maze[X][newY-1] = ' ';
                     generateMazeRecusive(maze, traveledMaze, size, X, newY);
                 }
                 break;
@@ -88,7 +92,7 @@ public class GameBoard {
                 if (newX > 0 && newX < size - 1 && !traveledMaze[newX][Y] && maze[newX][Y] == 'X') {
                     traveledMaze[newX][Y] = true;
                     maze[newX][Y] = ' ';
-                    maze[newX+1][Y] = ' ';
+                    maze[newX-1][Y] = ' ';
                     generateMazeRecusive(maze, traveledMaze, size, newX, Y);
                 }
                 break;
@@ -101,7 +105,7 @@ public class GameBoard {
                 if (newY > 0 && newY < size - 1 && !traveledMaze[X][newY] && maze[X][newY] == 'X') {
                     traveledMaze[X][newY] = true;
                     maze[X][newY] = ' ';
-                    maze[X][newY-1] = ' ';
+                    maze[X][newY+1] = ' ';
                     generateMazeRecusive(maze, traveledMaze, size, X, newY);
                 }
                 break;
@@ -158,6 +162,30 @@ public class GameBoard {
             }
         }
         return true;
+    }
+
+    private void connectEntranceAndExit(char[][] maze) {
+        // Entrance
+        if (startCord[0] == 0) {
+            maze[1][startCord[1]] = ' ';
+        } else if (startCord[0] == mazeSize - 1) {
+            maze[mazeSize - 2][startCord[1]] = ' ';
+        } else if (startCord[1] == 0) {
+            maze[startCord[0]][1] = ' ';
+        } else {
+            maze[startCord[0]][mazeSize - 2] = ' ';
+        }
+
+        // Exit
+        if (endCord[0] == 0) {
+            maze[1][endCord[1]] = ' ';
+        } else if (endCord[0] == mazeSize - 1) {
+            maze[mazeSize - 2][endCord[1]] = ' ';
+        } else if (endCord[1] == 0) {
+            maze[endCord[0]][1] = ' ';
+        } else {
+            maze[endCord[0]][mazeSize - 2] = ' ';
+        }
     }
 
 }
