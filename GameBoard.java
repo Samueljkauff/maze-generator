@@ -45,6 +45,8 @@ public class GameBoard {
 
         generateMazeRecusive(initialMaze, traveledMaze, size, X, Y);
         connectEntranceAndExit(initialMaze);
+        initialMaze[endCord[0]][endCord[1]] = '*';
+        initialMaze[startCord[0]][startCord[1]] = 'O';
 
         return initialMaze;
     }

@@ -21,14 +21,10 @@ public class Main {
             default -> size = -1;
         }
         GameBoard board = new GameBoard(size);
+        Controller controller = new Controller(board);
+
+        controller.startGame();
 
         scan.close();
-
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
-                System.out.print(board.maze[i][j] + " ");
-            }
-            System.out.println(); 
-        }
     }
 }
