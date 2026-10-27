@@ -35,8 +35,8 @@ public class GameBoard {
     public char[][] generateMaze(int size) {
         char[][] initialMaze = initializeMaze(size);
         boolean[][] traveledMaze = new boolean[size][size];
-        int X = ran.nextInt(0, size);
-        int Y = ran.nextInt(0, size);
+        int X = ran.nextInt((size - 1) / 2) * 2 + 1;
+        int Y = ran.nextInt((size - 1) / 2) * 2 + 1;
         traveledMaze[X][Y] = true;
         initialMaze[X][Y] = ' ';
 
@@ -49,52 +49,60 @@ public class GameBoard {
         List<Integer> directions = new ArrayList<>(List.of(0, 1, 2, 3));
         Collections.shuffle(directions);
         int move;
-        int newX;
-        int newY;
+        int newX = X;
+        int newY = Y;
 
         for (int direction : directions) {
         switch (direction) {
             case 0:
                 // UP
                 move = -2;
+                newX = X + move;
 
-                if (X + move > 0 && X + move < size - 1 && !traveledMaze[X + move][Y] && maze[X + move][Y] == 'X') {
-                    newX = X + move;
+                if (newX > 0 && newX < size - 1 && !traveledMaze[newX][Y] && maze[newX][Y] == 'X') {
                     traveledMaze[newX][Y] = true;
                     maze[newX][Y] = ' ';
+                    maze[newX-1][Y] = ' ';
+                    generateMazeRecusive(maze, traveledMaze, size, newX, Y);
                 }
                 break;
 
             case 1:
                 // RIGHT
                 move = 2;
+                newY = Y + move;
 
-                if (Y + move > 0 && Y + move < size - 1 && !traveledMaze[X][Y + move] && maze[X][Y + move] == 'X') {
-                    newY = Y + move;
+                if (newY > 0 && newY < size - 1 && !traveledMaze[X][newY] && maze[X][newY] == 'X') {
                     traveledMaze[X][newY] = true;
                     maze[X][newY] = ' ';
+                    maze[X][newY+1] = ' ';
+                    generateMazeRecusive(maze, traveledMaze, size, X, newY);
                 }
                 break;
 
             case 2:
                 // DOWN
                 move = 2;
+                newX = X + move;
 
-                if (X + move > 0 && X + move < size - 1 && !traveledMaze[X + move][Y] && maze[X + move][Y] == 'X') {
-                    newX = X + move;
+                if (newX > 0 && newX < size - 1 && !traveledMaze[newX][Y] && maze[newX][Y] == 'X') {
                     traveledMaze[newX][Y] = true;
                     maze[newX][Y] = ' ';
+                    maze[newX+1][Y] = ' ';
+                    generateMazeRecusive(maze, traveledMaze, size, newX, Y);
                 }
                 break;
 
             case 3:
                 // LEFT
                 move = -2;
+                newY = Y + move;
 
-                if (Y + move > 0 && Y + move < size - 1 && !traveledMaze[X][Y + move] && maze[X][Y + move] == 'X') {
-                    newY = Y + move;
+                if (newY > 0 && newY < size - 1 && !traveledMaze[X][newY] && maze[X][newY] == 'X') {
                     traveledMaze[X][newY] = true;
                     maze[X][newY] = ' ';
+                    maze[X][newY-1] = ' ';
+                    generateMazeRecusive(maze, traveledMaze, size, X, newY);
                 }
                 break;
         }
