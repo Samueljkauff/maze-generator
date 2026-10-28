@@ -1,4 +1,8 @@
-import java.util.Scanner;
+import java.io.IOException;
+
+import org.jline.terminal.Attributes;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
 public class Controller {
     GameBoard gameBoard;
@@ -11,24 +15,42 @@ public class Controller {
         this.currentY = gameBoard.startCord[1];
     }
 
-    public void startGame() {
-        boolean hasWon = false;
-        String direction;
-        Scanner input = new Scanner(System.in);
-        do {
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
-            System.out.println("You are \"O\". Use W/A/S/D to move around! Make it to the \"*\" to win!");
-            displayBoard();
-            direction = input.nextLine().toLowerCase();
-            updatePosition(direction);
-            if(currentX == gameBoard.endCord[0] && currentY == gameBoard.endCord[1]) {
-                hasWon = true;
-            }
-        } while(!hasWon);
+public void startGame() throws IOException {
+    try (Terminal terminal = TerminalBuilder.terminal()) {
 
-        System.out.println("YOU WON!!");
+        Attributes originalAttributes = terminal.getAttributes();
+        try {
+            terminal.enterRawMode();
+            boolean hasWon = false;
+
+            while (!hasWon) {
+                System.out.print("\033[H\033[2J");
+                System.out.println("\nUse W/A/S/D to move. Press Q to quit.\n");
+                displayBoard();
+                System.out.flush();
+
+                int key = terminal.reader().read();
+
+                if (key == -1) {
+                    break;
+                }
+
+                String direction = String.valueOf((char) key).toLowerCase();
+
+                if (direction.equals("q")) {
+                    break;
+                }
+
+                updatePosition(direction);
+
+                hasWon = currentX == gameBoard.endCord[0] && currentY == gameBoard.endCord[1];
+            }
+        } finally {
+            terminal.setAttributes(originalAttributes);
+        }
     }
+    System.out.println("\nYOU WON!");
+}
 
     public void updatePosition(String direction) {
         int newX = currentX;
